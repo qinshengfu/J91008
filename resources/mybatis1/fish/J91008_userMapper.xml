@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="J91008_userMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		"J91008_USER"
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		"GMT_CREATE",	
+		"GMT_MODIFIED",	
+		"TEAM_PERFORMANCE",
+		"IS_WITHDRAW",
+		"PHONE",	
+		"PASSWORD",	
+		"FEEDING_TODAY",	
+		"MONEY",	
+		"RECOMMENDED_NUMBER",	
+		"RECOMMENDER",	
+		"RE_PATH",	
+		"LOVE_COIN",	
+		"NICKNAME",
+		"IS_ADOPTION",
+		"J91008_USER_ID"
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+			#{GMT_CREATE},	
+			#{GMT_MODIFIED},
+			#{TEAM_PERFORMANCE},
+			#{IS_WITHDRAW},
+			#{PHONE},	
+			#{PASSWORD},	
+			#{FEEDING_TODAY},	
+			#{MONEY},	
+			#{RECOMMENDED_NUMBER},	
+			#{RECOMMENDER},	
+			#{RE_PATH},	
+			#{LOVE_COIN},	
+			#{NICKNAME},	
+			#{IS_ADOPTION},
+			#{J91008_USER_ID}
+	</sql>
+
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+			"J91008_USER_ID" = #{J91008_USER_ID}
+	</delete>
+
+	<!-- 清空表数据保留顶点账号-->
+	<delete id="wipeData" parameterType="pd">
+		delete from
+		<include refid="tableName"/>
+		where
+		"J91008_USER_ID" != '10000'
+	</delete>
+
+	<!-- 清空推荐数量-->
+	<update id="wipeReNumber" parameterType="pd">
+        update
+		<include refid="tableName"/>
+		set
+		"RECOMMENDED_NUMBER" = 0,
+        "FEEDING_TODAY" = 0,
+        "TEAM_PERFORMANCE" = 0,
+        "IS_WITHDRAW" = 0
+		where
+		"J91008_USER_ID" = '10000'
+	</update>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+			set
+				"PASSWORD" = #{PASSWORD},
+				"MONEY" = #{MONEY},
+				"LOVE_COIN" = #{LOVE_COIN},
+				"NICKNAME" = #{NICKNAME},
+				"IS_ADOPTION" = #{IS_ADOPTION},
+			"J91008_USER_ID" = "J91008_USER_ID"
+			where
+				"J91008_USER_ID" = #{J91008_USER_ID}
+	</update>
+
+	<!-- 修改资料 -->
+	<update id="editData" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"NICKNAME" = #{NICKNAME},
+		<if test="PASSWORD != null and PASSWORD != '' " >
+			"PASSWORD" = #{PASSWORD}
+		</if>
+		where
+		"PHONE" = #{PHONE}
+	</update>
+
+	<!-- 提现次数+1 -->
+	<update id="addNumber" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"IS_WITHDRAW" = "IS_WITHDRAW"+1
+		where
+		"J91008_USER_ID" = #{J91008_USER_ID}
+	</update>
+
+    <!-- 喂养次数+1 -->
+    <update id="addFeedCount" parameterType="pd">
+        update
+        <include refid="tableName"/>
+        set
+        "FEEDING_TODAY" = "FEEDING_TODAY"+1
+        where
+        "J91008_USER_ID" = #{J91008_USER_ID}
+    </update>
+
+	<!-- 推荐人团队业绩次数+1 -->
+	<update id="addTeamCount" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"TEAM_PERFORMANCE" = "TEAM_PERFORMANCE"+1
+		where
+		"J91008_USER_ID" = #{RECOMMENDER}
+	</update>
+
+	<!-- 增加饲料（钱） -->
+	<update id="addMoney" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"MONEY" = "MONEY"+#{COST}
+		where
+		"J91008_USER_ID" = #{J91008_USER_ID}
+	</update>
+
+	<!-- 减少饲料（钱） -->
+	<update id="deducMoney" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"MONEY" = "MONEY"-#{COST}
+		where
+		"PHONE" = #{PHONE}
+	</update>
+
+	<!-- 减少饲料（钱）并更新领养状态 -->
+	<update id="deducMoneyAndUpState" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"MONEY" = "MONEY"-#{COST}，
+		"IS_ADOPTION" = 1
+		where
+		"PHONE" = #{PHONE}
+	</update>
+
+	<!-- 推荐人数+1 -->
+	<update id="addReNumber" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+		"RECOMMENDED_NUMBER" = "RECOMMENDED_NUMBER"+1
+		where
+		"PHONE" = #{PHONE}
+	</update>
+
+	<!-- 重置喂养次数和提现次数 -->
+	<update id="resetRec" parameterType="pd">
+		update
+		<include refid="tableName"/>
+		set
+			"IS_WITHDRAW" = 0,
+			"FEEDING_TODAY" = 0
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		where
+			"J91008_USER_ID" = #{J91008_USER_ID}
+	</select>
+
+	<!-- 验证手机号和密码是否匹配 -->
+	<select id="findByPhoneAndpassword" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		where
+		"PHONE" = #{PHONE}
+		and
+		"PASSWORD" = #{PASSWORD}
+	</select>
+
+	<!-- 通过手机号获取数据 -->
+	<select id="findByPhone" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		where
+		"PHONE" = #{PHONE}
+	</select>
+
+
+	<!-- 重置序列 -->
+	<select id="reset_seq" parameterType="pd" statementType="CALLABLE">
+		<!--调用存储过程有专门的标签statementType="CALLABLE" 用{}括起来-->
+		{
+			call RESET_SEQ(#{seqName},#{seqStart})
+		}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+
+					"TEAM_PERFORMANCE" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or
+					"IS_WITHDRAW" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or
+					"PHONE" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or
+					"FEEDING_TODAY" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or
+					"MONEY" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or
+					"RECOMMENDED_NUMBER" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or
+					"RECOMMENDER" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or
+					"IS_ADOPTION" LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != '' "><!-- 时间段检索  开始时间-->
+			and
+			"GMT_CREATE" &gt;= #{pd.lastStart}
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != '' "><!-- 时间段检索 结束时间 -->
+			AND
+			"GMT_CREATE" &lt;=  ( SELECT TO_CHAR(( SELECT to_date( #{pd.lastEnd}, 'yyyy-mm-dd' ) + 1 FROM dual ), 'yyyy-mm-dd' ) FROM dual )
+		</if>
+
+
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+	</select>
+
+	<!-- 列表(推荐图) -->
+	<select id="recommendationMap" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		where
+			"RE_PATH" LIKE CONCAT(CONCAT('%', #{J91008_USER_ID}),'%')
+			order by "J91008_USER_ID"
+	</select>
+
+	<!-- 列表(所有直接推荐下级) -->
+	<select id="listByRecommender" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		where
+			"RECOMMENDER" = #{RECOMMENDER}
+			order by "J91008_USER_ID"
+	</select>
+
+	<!-- 根据推荐路径查找最高N人 -->
+	<select id="listMostNumByPath" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+		WHERE
+		"J91008_USER_ID" IN （${PATH}）
+		AND ROWNUM &lt;= #{NUM}
+		ORDER BY
+		"J91008_USER_ID" DESC
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+			"J91008_USER_ID" in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	<!-- fh313596790qq(青苔) -->
+</mapper>

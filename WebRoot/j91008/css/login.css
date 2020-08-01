@@ -1,0 +1,303 @@
+.row-text input::-webkit-input-placeholder {
+	color: #b2b2b2;
+	font-size: 16px;
+}
+.reg-row input::-webkit-input-placeholder {
+	color: #b2b2b2;
+	font-size: 16px;
+}
+.login_bg{
+	background:url(../images/loginbg.png);
+	background-size: 100% 100%;
+	position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+body{
+	background-color: #fff;
+}
+img{
+	width: 100%;
+	height: 100%;
+}
+.logo{
+	width: 140px;
+    height: 140px;
+    /*border-radius: 50%;*/
+    border: 0;
+    text-align: center;
+    margin: 50px auto 0px;
+}
+.logo img{
+	width: 100%;
+	height: 100%;
+	/*border-radius: 50%;*/
+}
+.login-view{
+	margin: 30px 20px;
+	padding: 24px 20px;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 8px 8px 4px 1px rgba(255,255,255,.5);
+}
+.reglink{
+	display: block;
+	text-align: right;
+	color: #666;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+.login-tab{
+	margin: 0px 10px;
+}
+.row-text{
+	position: relative;
+}
+.row-text input{
+	height: 40px;
+    border: 0;
+    background-color: transparent;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    color: #000;
+    font-size: 16px;
+    border-radius: 0;
+    padding: 0;
+    padding-left: 40px;
+}
+
+.row-text .login-icon{
+    position: absolute;
+    font-size: 26px;
+    color: #666;
+    left: 4px;
+    top: 14%;
+}
+
+.reg-row .reg-icon{
+	position: absolute;
+    font-size: 26px;
+    color: #666;
+    left: -35px;
+    top: 25%;
+}
+.row-text .login-icon1{
+    position: absolute;
+    font-size: 18px;
+    color: #999;
+    right: 10px;
+    top: 18%;
+}
+
+.login-btn input{
+	width: 100%;
+    height: 41px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 0;
+    font-size: 16px;
+    background: -webkit-linear-gradient(left,#2d57e3, #63d0ff);
+	background: -o-linear-gradient(right,#2d57e3, #63d0ff);
+    background: -moz-linear-gradient(right,#2d57e3, #63d0ff);
+    background: linear-gradient(to right,#2d57e3, #63d0ff);
+    color: #fff;
+}
+.login-btn input.login-btn-input{
+    border-radius: 20px;
+    background: -webkit-linear-gradient(#63d0ff, #2d57e3);
+	background: -o-linear-gradient(#63d0ff, #2d57e3);
+    background: -moz-linear-gradient(#63d0ff, #2d57e3);
+    background: linear-gradient(#63d0ff, #2d57e3);
+
+}
+.login-reg{
+	margin-top: 12px;
+	font-size: 12px;
+	border-radius: 26px;
+	text-align: center;
+	color: #999;
+}
+.login-reg-a{
+	color: #ff0000;
+	padding-left: 2px;
+}
+.reg-row input[type=button]{
+	position: absolute;
+    top: 0px;
+    right: 0px;
+    border: 0;
+    color: #2068ff;
+    padding: 12px 4px;
+    font-size: 13px;
+}
+.login-auth{
+	position: absolute;
+    padding: 0;
+    border-radius: 4px;
+    border: 0;
+    right: 0px;
+    top: 0px;
+    width: 80px;
+    height: 30px;
+}
+.reg-tab{
+	margin-top: 20px;
+}
+.reg-row {
+    position: relative;
+    border-bottom: 1px #ccc solid;
+    height: 40px;
+    margin-bottom: 20PX;
+    margin-left: 40px;
+}
+.reg-phone {
+    position: relative;
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    width: 28%;
+}
+.reg-phone1 {
+    float: left;
+    width: 72%;
+}
+.reg-row .reg-phone1 input{
+    padding-left: 10px;
+}
+.reg-row input { 
+    height: 40px;
+    border: 0;
+    background-color: transparent;
+    margin-bottom: 0;
+    color: #000;
+    font-size: 16px;
+    padding-top: 11px;
+    padding-left: 2px;
+}
+.reg-select {
+    position: relative;
+    background-color: transparent;
+    z-index: 1;
+    font-size: 15px;
+    padding: 0;
+    width: 90px;
+    box-sizing: border-box;
+}
+.reg-phone:before {
+    content: " ";
+    display: inline-block;
+    height: 15px;
+    border-width: 0 1px 0 0;
+    border-color: #999899;
+    border-style: solid;
+    position: absolute;
+    top: 32%;
+    right: -4px;
+}
+.reg-hint{
+	color: #ff0000;
+	font-size: 12px;
+	margin-top: -10px;
+}
+.reg-btn{
+	width: 100%;
+    height: 41px;
+    margin-top: 20px;
+    border-radius: 25px;
+    border: 1px solid #ff0000;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: transparent;
+    color: #ff0000;
+}
+.reg-phone span{
+	font-size: 16px;
+}
+#forget{
+	display: none;
+}
+.forget-view{
+	position: relative;
+	background-color: #fff;
+	height: 90px;
+	line-height: 90px;
+	font-size: 14px;
+	color: #000;
+	text-align: center;
+}
+.forget-icon{
+	position: absolute;
+    color: #000;
+    top: 5px;
+    right: 12px;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+}
+.logindown{
+	float: left;
+    display: inline-block;
+    font-size: 14px;
+    color: #999;
+    margin-left: 10px;
+    margin-top: -5px;
+}
+.login-pwd{
+	float: right;
+    display: inline-block;
+    font-size: 14px;
+    color: #999;
+    
+    margin-top: -5px;
+}
+/*注册*/
+.register-view{
+	margin: 20px 30px;
+}
+.promotion-text{
+	position: absolute;
+    font-size: 15px;
+    right: 3px;
+    top: 10px;
+}
+.agreement{
+	position: relative;
+	font-size: 13px;
+	margin-left: 40px;
+}
+.agreement.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio] {
+    left: -2px;
+    top: -6px;
+}
+.agreement span{
+	position: absolute;
+    top: -5px;
+    left: 25px;
+}
+.agreement.mui-checkbox input[type=checkbox]:before, .mui-radio input[type=radio]:before {
+    font-family: Muiicons;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none;
+    color: #aaa;
+    border-radius: 0;
+    width: 10px;
+    background: 0 0;
+    -webkit-font-smoothing: antialiased;
+}
+.agreement.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before {
+    color: #007aff;
+}
+
+@media screen and (max-width: 320px) {
+	.logo{
+	    margin: 40px auto 0px;
+	}
+}

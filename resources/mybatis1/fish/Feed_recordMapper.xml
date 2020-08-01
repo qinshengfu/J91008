@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Feed_recordMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		"FEED_RECORD"
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		"GMT_CREATE",	
+		"GMT_MODIFIED",	
+		"FEED_NUMBER",	
+		"USER_ID",
+		"IS_OUT",
+		"ROW_NUMBER",
+		"COUNT_OUT",
+		"FEED_RECORD_ID"
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+			#{GMT_CREATE},	
+			#{GMT_MODIFIED},	
+			#{FEED_NUMBER},	
+			#{USER_ID},
+			#{IS_OUT},	
+			#{ROW_NUMBER},
+			#{COUNT_OUT},
+			#{FEED_RECORD_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			"FEED_RECORD_ID" = #{FEED_RECORD_ID}
+	</delete>
+
+	<!-- 清空表 -->
+	<delete id="wipeData" parameterType="pd">
+		delete from
+		<include refid="tableName"/>
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+			set 
+				"GMT_CREATE" = #{GMT_CREATE},	
+				"GMT_MODIFIED" = #{GMT_MODIFIED},	
+				"FEED_NUMBER" = #{FEED_NUMBER},	
+				"USER_ID" = #{USER_ID},
+				"IS_OUT" = #{IS_OUT},	
+				"ROW_NUMBER" = #{ROW_NUMBER},	
+			"FEED_RECORD_ID" = "FEED_RECORD_ID"
+			where 
+				"FEED_RECORD_ID" = #{FEED_RECORD_ID}
+	</update>
+
+	<!-- 修改是否出局 -->
+	<update id="editState" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		"IS_OUT" = #{IS_OUT}，
+		"COUNT_OUT" = #{COUNT_OUT}
+		where
+		"FEED_RECORD_ID" = #{FEED_RECORD_ID}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"/>
+		from 
+		<include refid="tableName"></include>
+		where 
+			"FEED_RECORD_ID" = #{FEED_RECORD_ID}
+	</select>
+
+	<!-- 通过用户id获取累积 -->
+	<select id="findCountByUserId" parameterType="pd" resultType="pd">
+		select
+			COUNT("USER_ID") AS USER_COUNT
+		from
+		<include refid="tableName"></include>
+		where
+		"USER_ID" = #{USER_ID}
+	</select>
+
+	<!-- 获取未出局的最小排号记录 -->
+	<select id="getNotOutMin" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"/>
+		from
+		<include refid="tableName"/>
+			where "ROW_NUMBER" =
+			(
+			SELECT MIN("ROW_NUMBER") FROM <include refid="tableName"/> WHERE "IS_OUT" = 0
+			)
+	</select>
+
+	<!-- 获取喂养记录累积 -->
+	<select id="getRecCount" parameterType="pd" resultType="pd">
+		select
+			COUNT("FEED_RECORD_ID") AS REC_COUNT,
+			DECODE(MAX("COUNT_OUT"), null, 0,MAX("COUNT_OUT"))  AS OUT_COUNT
+		from
+			<include refid="tableName"/>
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != '' "><!-- 时间段检索  开始时间-->
+			and
+			"GMT_CREATE" &gt;= #{pd.lastStart}
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != '' "><!-- 时间段检索 结束时间 -->
+			AND
+			"GMT_CREATE" &lt;=  ( SELECT TO_CHAR(( SELECT to_date( #{pd.lastEnd}, 'yyyy-mm-dd' ) + 1 FROM dual ), 'yyyy-mm-dd' ) FROM dual )
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+
+	<!-- 列表(根据用户ID获取未出局的记录) -->
+	<select id="listByUserId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+			"USER_ID" = #{USER_ID}
+			and
+			"IS_OUT" = 0
+			order by "ROW_NUMBER"
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			"FEED_RECORD_ID" in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
